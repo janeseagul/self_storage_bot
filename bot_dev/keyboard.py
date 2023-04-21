@@ -2,6 +2,25 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ChatAction
 from aiogram import types
 
 
+def choose_role():
+    keyboard = types.InlineKeyboardMarkup(resize_keyboard=True)
+    buttons = [
+        types.InlineKeyboardButton(text='🤵 Войти как администратор', callback_data='admin'),
+        types.InlineKeyboardButton(text='🛒 Войти как заказчик', callback_data='user')
+    ]
+    keyboard.add(*buttons)
+    return keyboard
+
+
+def back():
+    keyboard = types.InlineKeyboardMarkup(resize_keyboard=True)
+    buttons = [
+        types.InlineKeyboardButton(text='⬅️ Обратно в меню', callback_data='back_to_menu')
+    ]
+    keyboard.add(*buttons)
+    return keyboard
+
+
 def kb1():
     keyboard = types.InlineKeyboardMarkup(resize_keyboard=True)
     buttons = [
@@ -70,32 +89,42 @@ def kb6():
     return keyboard
 
 
-def boxes():
-    keyboard = types.InlineKeyboardMarkup(resize_keyboard=True)
-    buttons =[
-        types.InlineKeyboardButton(text='')
-    ]
-
-
-def choose_del():
+def kb7():
     keyboard = types.InlineKeyboardMarkup(resize_keyboard=True)
     buttons = [
-        types.InlineKeyboardButton(text='🔧 Позвать курьера', callback_data='runner'),
-        types.InlineKeyboardButton(text='🚙 Отвезу сам', callback_data='myself'),
-        types.InlineKeyboardButton(text='⬅️ Обратно в меню', callback_data='back_to_menu'),
-        types.InlineKeyboardButton(text='*️⃣ Поддержка', callback_data='support'),
-        types.InlineKeyboardButton(text='❓ F.A.Q', callback_data='faq')
+        types.InlineKeyboardButton(text='Подтвердить заказ', callback_data='ok'),
+        types.InlineKeyboardButton(text='⬅️ Обратно в меню', callback_data='back_to_menu')
     ]
     keyboard.add(*buttons)
     return keyboard
 
 
-def choose_del2():
+def boxes_main():
     keyboard = types.InlineKeyboardMarkup(resize_keyboard=True)
     buttons = [
+        types.InlineKeyboardButton(text='Зимние вещи', callback_data='box1'),
+        types.InlineKeyboardButton(text='Мебель', callback_data='furniture')
+    ]
+    keyboard.add(*buttons)
+    return keyboard
+
+
+def boxes2():
+    keyboard = types.InlineKeyboardMarkup(resize_keyboard=True)
+    buttons = [
+        types.InlineKeyboardButton(text='🎒 Забрать вещи', callback_data='get_back_main'),
+        types.InlineKeyboardButton(text='⬅️ Обратно в меню', callback_data='back_to_menu')
+    ]
+    keyboard.add(*buttons)
+    return keyboard
+
+
+def choose_del():
+    keyboard = types.InlineKeyboardMarkup(resize_keyboard=True)
+    buttons = [
+        types.InlineKeyboardButton(text='🔧 Бесплатная курьерская доставка', callback_data='runner'),
+        types.InlineKeyboardButton(text='🚙 Отвезу сам', callback_data='myself'),
         types.InlineKeyboardButton(text='⬅️ Обратно в меню', callback_data='back_to_menu'),
-        types.InlineKeyboardButton(text='🔧 Позвать курьера', callback_data='idkrunners'),
-        types.InlineKeyboardButton(text='🚙 Отвезу сам', callback_data='idkmyself'),
         types.InlineKeyboardButton(text='❓ F.A.Q', callback_data='faq')
     ]
     keyboard.add(*buttons)
@@ -130,7 +159,7 @@ def choose_height():
         types.InlineKeyboardButton(text='Менее 3 кв. м.', callback_data='less3'),
         types.InlineKeyboardButton(text='3 - 7 кв. м', callback_data='3-7m'),
         types.InlineKeyboardButton(text='7 - 10 кв. м', callback_data='7-10m'),
-        types.InlineKeyboardButton(text='Не знаю, помогите мне!', callback_data='idk'),
+        types.InlineKeyboardButton(text='Не знаю, помогите мне!', callback_data='idkh'),
         types.InlineKeyboardButton(text='⬅️ Обратно в меню', callback_data='back_to_menu')
     ]
     keyboard.add(*buttons)
