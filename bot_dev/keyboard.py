@@ -2,7 +2,7 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ChatAction
 from aiogram import types
 
 
-def main_keyboard():
+def kb1():
     keyboard = types.InlineKeyboardMarkup(resize_keyboard=True)
     buttons = [
         types.InlineKeyboardButton(text='*️⃣ Поддержка', callback_data='support'),
@@ -15,7 +15,7 @@ def main_keyboard():
     return keyboard
 
 
-def support_buttons():
+def kb2():
     keyboard = types.InlineKeyboardMarkup(resize_keyboard=True)
     buttons = [
         types.InlineKeyboardButton(text='📩 Обратиться в поддержу', callback_data='letter_to_sup'),
@@ -27,7 +27,7 @@ def support_buttons():
     return keyboard
 
 
-def next_main_keyboard():
+def kb3():
     keyboard = types.InlineKeyboardMarkup(resize_keyboard=True)
     buttons = [
         types.InlineKeyboardButton(text='❌ Отменить', callback_data='cancel'),
@@ -38,7 +38,7 @@ def next_main_keyboard():
     return keyboard
 
 
-def giveaway():
+def kb4():
     keyboard = types.InlineKeyboardMarkup(resize_keyboard=True)
     buttons = [
         types.InlineKeyboardButton(text='📦 Оставить вещи', callback_data='application'),
@@ -48,7 +48,7 @@ def giveaway():
     return keyboard
 
 
-def storage_list():
+def kb5():
     keyboard = types.InlineKeyboardMarkup(resize_keyboard=True)
     buttons = [
         types.InlineKeyboardButton(text='✅ Что можно хранить на складе', callback_data='storage_list'),
@@ -60,7 +60,7 @@ def storage_list():
     return keyboard
 
 
-def next_keyboard():
+def kb6():
     keyboard = types.InlineKeyboardMarkup(resize_keyboard=True)
     buttons = [
         types.InlineKeyboardButton(text='✍ Оставить заявку', callback_data='application'),
@@ -70,12 +70,19 @@ def next_keyboard():
     return keyboard
 
 
+def boxes():
+    keyboard = types.InlineKeyboardMarkup(resize_keyboard=True)
+    buttons =[
+        types.InlineKeyboardButton(text='')
+    ]
+
+
 def choose_del():
     keyboard = types.InlineKeyboardMarkup(resize_keyboard=True)
     buttons = [
-        types.InlineKeyboardButton(text='⬅️ Обратно в меню', callback_data='back_to_menu'),
         types.InlineKeyboardButton(text='🔧 Позвать курьера', callback_data='runner'),
         types.InlineKeyboardButton(text='🚙 Отвезу сам', callback_data='myself'),
+        types.InlineKeyboardButton(text='⬅️ Обратно в меню', callback_data='back_to_menu'),
         types.InlineKeyboardButton(text='*️⃣ Поддержка', callback_data='support'),
         types.InlineKeyboardButton(text='❓ F.A.Q', callback_data='faq')
     ]
@@ -83,7 +90,19 @@ def choose_del():
     return keyboard
 
 
-def request_keyboard():
+def choose_del2():
+    keyboard = types.InlineKeyboardMarkup(resize_keyboard=True)
+    buttons = [
+        types.InlineKeyboardButton(text='⬅️ Обратно в меню', callback_data='back_to_menu'),
+        types.InlineKeyboardButton(text='🔧 Позвать курьера', callback_data='idkrunners'),
+        types.InlineKeyboardButton(text='🚙 Отвезу сам', callback_data='idkmyself'),
+        types.InlineKeyboardButton(text='❓ F.A.Q', callback_data='faq')
+    ]
+    keyboard.add(*buttons)
+    return keyboard
+
+
+def contact():
     keyboard = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('📞 Отправить номер телефона',
                                                                             request_contact=True,
                                                                             one_time_keyboard=True))
@@ -113,6 +132,16 @@ def choose_height():
         types.InlineKeyboardButton(text='7 - 10 кв. м', callback_data='7-10m'),
         types.InlineKeyboardButton(text='Не знаю, помогите мне!', callback_data='idk'),
         types.InlineKeyboardButton(text='⬅️ Обратно в меню', callback_data='back_to_menu')
+    ]
+    keyboard.add(*buttons)
+    return keyboard
+
+
+def data_processing():
+    keyboard = types.InlineKeyboardMarkup(resize_keyboard=True)
+    buttons = [
+        types.InlineKeyboardButton(text='Да', callback_data='yes'),
+        types.InlineKeyboardButton(text='Нет, прошу не использовать мои персональные данные', callback_data='no')
     ]
     keyboard.add(*buttons)
     return keyboard

@@ -1,20 +1,13 @@
-import os
-from dotenv import load_dotenv
 import asyncio
-from asyncio import sleep
-
-import bot_db
-from keyboard import *
+import os
 
 from aiogram import Bot, Dispatcher, executor, types
-from aiogram.types import ContentTypes
-
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
-from aiogram.dispatcher.filters import Text, ContentTypeFilter
 from aiogram.dispatcher.filters.state import State, StatesGroup
-
-from aiogram.types import Contact
+from aiogram.types import ContentTypes
+from dotenv import load_dotenv
+from keyboard import *
 
 load_dotenv()
 tg_token = os.getenv('TG_BOT_TOKEN')
@@ -57,12 +50,12 @@ async def send_good_list(call: types.CallbackQuery):
 ❌ Лаки и краски в негерметичной таре
 ❌ Любой мусор и отходы
     """
-    await call.message.answer(good_list, reply_markup=next_keyboard())
+    await call.message.answer(good_list, reply_markup=kb6())
 
 
 @dp.callback_query_handler(text='support')
 async def to_support(call: types.CallbackQuery):
-    await call.message.answer('Выберите опцию:', reply_markup=support_buttons())
+    await call.message.answer('Выберите опцию:', reply_markup=kb2())
 
 
 @dp.callback_query_handler(text='faq')
@@ -82,29 +75,27 @@ async def send_faq(call: types.CallbackQuery):
 Там вы можете заказать возврат вещей в любое удобное для вас время или добавить новые вещи для хранения. \
 Все ваши вещи всегда находятся в безопасности и готовы к использованию.
     """
-    await call.message.answer(faq, reply_markup=storage_list())
+    await call.message.answer(faq, reply_markup=kb5())
 
 
 @dp.callback_query_handler(text='back_to_menu')
 async def back_to_menu(call: types.CallbackQuery):
-    await call.message.answer(text='Вы вернулись обратно в меню', reply_markup=main_keyboard())
+    await call.message.answer(text='Вы вернулись обратно в меню', reply_markup=kb1())
 
 
 @dp.callback_query_handler(text='application')
 async def leave_a_request(call: types.CallbackQuery):
-    await D.contact.set()
-    await call.message.answer('Для продолжения нажмите кнопку ниже', reply_markup=request_keyboard())
-    await asyncio.sleep(0.5)
-    await call.message.answer('Укажите адрес, по которому нужно забрать вещи:')
-    await asyncio.sleep(0.5)
+    await call.message.answer('Подтвердите согласие на обработку персональных данных', reply_markup=data_processing())
 
 
 @dp.callback_query_handler(text=['runner', 'myself'])
 async def delivery(call: types.CallbackQuery):
     if call.data == 'runner':
-        await call.message.answer('Вы выбрали курьерскую доставку! Укажите вес ваших вещей:', reply_markup=choose_weight())
+        await call.message.answer("""Вы выбрали курьерскую доставку! 
+Наши муверы приедут к вам по указанному адресу, измерят (если это необходимо) и упакуют ваши вещи.""",
+                                  reply_markup=choose_weight())
     elif call.data == 'myself':
-        await call.message.answer('Вы привезете вещи сами. Укажите вес ваших вещей:', reply_markup=choose_weight())
+        await call.message.answer('Ждем вас по адресу: Юбилейный проспект, 17к1', reply_markup=choose_weight())
 
 
 @dp.callback_query_handler(text=['ten', 'ten_twenty', '40_70', '70-100', 'more100', 'idk'])
@@ -112,9 +103,22 @@ async def choose_w(call: types.CallbackQuery):
     if call.data == 'idk':
         await call.message.answer("""Конечно! Мы поможем вам рассчитать вес и высоту ваших вещей. 
 Вы можете привезти вещи сами или мы пришлем к вам команду муверов, чтобы рассчитать рост и вес на месте.""",
-                                  reply_markup=choose_del())
+                                  reply_markup=choose_del2())
     else:
         await call.message.answer('Теперь укажите высоту ваших вещей:', reply_markup=choose_height())
+
+
+@dp.callback_query_handler(text='idkmyself')
+async def del_by_myself(call: types.CallbackQuery):
+    await call.message.answer('Ждем вас по адресу: Юбилейный проспект, 17к1', reply_markup=kb2())
+
+
+@dp.callback_query_handler(text='idkrunners')
+async def callrunners(call: types.CallbackQuery):
+    await call.message.answer(
+        'Муверы приедут по указанному адресу, чтобы измерить, упаковать и забрать ваши вещи на склад')
+    await asyncio.sleep(1)
+    await call.message.answer('Для продолжения воспользуйтесь кнопками из меню ниже 👇:', reply_markup=kb1())
 
 
 @dp.callback_query_handler(text='letter_to_sup')
@@ -123,12 +127,24 @@ async def send_letter_to_sup(call: types.CallbackQuery):
 storagebot@gmail.com
 +79215897941""")
     await asyncio.sleep(1)
-    await call.message.answer('Для продолжения воспользуйтесь кнопками из меню ниже 👇:', reply_markup=next_keyboard())
+    await call.message.answer('Для продолжения воспользуйтесь кнопками из меню ниже 👇:', reply_markup=kb6())
+
+
+@dp.callback_query_handler(text=['yes', 'no'])
+async def person_data_processing(call: types.CallbackQuery):
+    if call.data == 'yes':
+        await D.contact.set()
+        await call.message.answer('Для продолжения отправьте свой номер телефона, используя кнопку ниже', reply_markup=contact())
+        await asyncio.sleep(1)
+        await call.message.answer('Введите ваш адрес в формате: ул. Южная, д. 13, кв. 7')
+    if call.data == 'no':
+        await call.message.answer('Выберите подходящую опцию из меню ниже:', reply_markup=kb2())
 
 
 @dp.message_handler(state=D.contact)
 async def make_application(msg: types.Message, state: FSMContext, content_types=ContentTypes.CONTACT):
-    await msg.answer('Ваши контактные данные получены.\nВыберите подходящую опцию из меню ниже 👇:', reply_markup=choose_del())
+    await msg.answer('Ваши контактные данные получены.\nВыберите подходящую опцию из меню ниже 👇:',
+                     reply_markup=choose_del())
     await state.finish()
 
 
@@ -140,7 +156,7 @@ async def start(msg: types.Message):
 Мы заберём ваши вещи на наш склад, сохраним и привезём обратно в любую точку Москвы.
 Для выбора интересующего вас раздела воспользуйтесь кнопками из меню ниже 👇
         """
-    await msg.answer(text, reply_markup=main_keyboard())
+    await msg.answer(text, reply_markup=kb1())
 
 
 if __name__ == '__main__':
