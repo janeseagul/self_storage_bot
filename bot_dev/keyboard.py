@@ -166,6 +166,20 @@ def choose_height():
     return keyboard
 
 
+def choose_data():
+    keyboard = InlineKeyboardMarkup(resize_keyboard=True)
+    buttons = [
+        types.InlineKeyboardButton(text='1 месяц', callback_data='1'),
+        types.InlineKeyboardButton(text='6 месяцев', callback_data='6'),
+        types.InlineKeyboardButton(text='1 год', callback_data='1y'),
+        types.InlineKeyboardButton(text='Другое', callback_data='other'),
+        types.InlineKeyboardButton(text='⬅️ Обратно в меню', callback_data='back_to_menu')
+
+    ]
+    keyboard.add(*buttons)
+    return keyboard
+
+
 def data_processing():
     keyboard = types.InlineKeyboardMarkup(resize_keyboard=True)
     buttons = [

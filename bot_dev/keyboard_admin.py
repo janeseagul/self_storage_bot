@@ -27,7 +27,7 @@ def kb_admin_2():
     buttons = [
         types.InlineKeyboardButton(text='➡️ Следующий бокс', callback_data='next_b'),
         types.InlineKeyboardButton(text='📋 Отобразить списком', callback_data='make_list'),
-        types.InlineKeyboardButton(text='◀️Обратно в меню', callback_data='adm_menu'),
+        types.InlineKeyboardButton(text='◀️ Обратно в меню', callback_data='adm_menu'),
     ]
     keyboard.add(*buttons)
     return keyboard
@@ -50,7 +50,7 @@ def kb_admin_4():
     buttons = [
         types.InlineKeyboardButton(text='➡️ Следующий бокс', callback_data='next_full_b'),
         types.InlineKeyboardButton(text='📋 Отобразить списком', callback_data='make_list_b'),
-        types.InlineKeyboardButton(text='◀️Обратно в меню', callback_data='adm_menu'),
+        types.InlineKeyboardButton(text='◀️ Обратно в меню', callback_data='adm_menu'),
     ]
 
 
@@ -74,6 +74,19 @@ def choose_height_adm():
         types.InlineKeyboardButton(text='Менее 3 кв. м.', callback_data='less_3'),
         types.InlineKeyboardButton(text='3 - 7 кв. м', callback_data='3-7'),
         types.InlineKeyboardButton(text='7 - 10 кв. м', callback_data='7-10'),
+        types.InlineKeyboardButton(text='◀️ Обратно в меню', callback_data='adm_menu')
+    ]
+    keyboard.add(*buttons)
+    return keyboard
+
+
+def choose_order_date():
+    keyboard = types.InlineKeyboardMarkup(resize_keyboard=True)
+    buttons = [
+        types.InlineKeyboardButton(text='1 месяц', callback_data='month'),
+        types.InlineKeyboardButton(text='6 месяцев', callback_data='sixmonth'),
+        types.InlineKeyboardButton(text='1 год', callback_data='year'),
+        types.InlineKeyboardButton(text='Другое', callback_data='diff'),
         types.InlineKeyboardButton(text='◀️ Обратно в меню', callback_data='adm_menu')
     ]
     keyboard.add(*buttons)
