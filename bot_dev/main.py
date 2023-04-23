@@ -12,6 +12,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from dotenv import load_dotenv
 from keyboard import *
 from keyboard_admin import *
+import logging
 
 load_dotenv()
 tg_token = os.getenv('TG_BOT_TOKEN')
@@ -20,6 +21,7 @@ bot = Bot(token=tg_token)
 storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
 scheduler = AsyncIOScheduler(timezone='Europe/Moscow')
+logging.basicConfig(level=logging.INFO)
 
 
 class D(StatesGroup):
@@ -36,7 +38,7 @@ async def on_startup(_):
 @dp.callback_query_handler(text=['admin', 'user'])
 async def get_role(call: types.CallbackQuery):
     if call.data == 'user':
-        await call.message.answer('Добро пожаловать! Выберите интересующий вас раздел:', reply_markup=kb1())
+        await call.message.answer(f'Добро пожаловать, {call.from_user.first_name} Выберите интересующий вас раздел:', reply_markup=kb1())
     elif call.data == 'admin':
         await call.message.answer('Вы вошли в режим админа. Выберите интересующий вас раздел:', reply_markup=kb_admin_1())
 
@@ -314,15 +316,23 @@ async def arrears_reminder(msg: types.Message):
 Если по истечению 6 месяцев вы их не заберете - вещи будут потеряны.""")
 
 
+@dp.message_handler()
+async def arrears_month_reminder(msg: types.Message):
+    chat_id = msg.from_user.id
+    await bot.send_message(chat_id, text='Закончился срок хранения вещей в ячейке.')
+
+
 async def main(state: FSMContext):
     data = await state.get_data()
     finished_at = data['finished_at']
-    scheduler.add_job()
-    scheduler.add_job(arrears_reminder, trigger='date', run_date=datetime.now() - finished_at, args=(bot,))
-    scheduler.add_job(month_reminder, trigger='date', run_date=datetime.now() + timedelta(days=30), args=(bot,))
-    scheduler.add_job(two_weeks_reminder, trigger='date', run_date=datetime.now() + timedelta(days=14), args=(bot,))
-    scheduler.add_job(week_reminder, trigger='date', run_date=datetime.now() + timedelta(days=7), args=(bot,))
-    scheduler.add_job(three_day_reminder, trigger='date', run_date=datetime.now() + timedelta(days=3), args=(bot,))
+    while datetime.now() >= finished_at:
+        scheduler.add_job(month_reminder, trigger='date', run_date=datetime.now() + timedelta(days=30), args=(bot,))
+        scheduler.add_job(two_weeks_reminder, trigger='date', run_date=datetime.now() + timedelta(days=14), args=(bot,))
+        scheduler.add_job(week_reminder, trigger='date', run_date=datetime.now() + timedelta(days=7), args=(bot,))
+        scheduler.add_job(three_day_reminder, trigger='date', run_date=datetime.now() + timedelta(days=3), args=(bot,))
+    if datetime.now() - finished_at == 0:
+        scheduler.add_job(arrears_month_reminder, 'interval', day=30)
+        scheduler.add_job(arrears_reminder, trigger='date', run_date=datetime.now() - finished_at, args=(bot,))
 
 
 if '__main__' == __name__:
